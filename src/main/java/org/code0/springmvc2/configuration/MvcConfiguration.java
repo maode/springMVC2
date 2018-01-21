@@ -79,7 +79,7 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         return localeResolver;
     }
     /**
-     * 配置拦截器拦截的语言环境参数名【可选，默认为locale】
+     * 配置拦截器拦截的语言环境参数名【可选，默认为locale】 
      * @return
      */
     @Bean
