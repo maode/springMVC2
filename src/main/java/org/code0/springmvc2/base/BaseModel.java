@@ -1,4 +1,4 @@
-package org.code0.base.model;
+package org.code0.springmvc2.base;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;

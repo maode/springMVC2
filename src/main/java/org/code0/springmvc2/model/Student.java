@@ -1,15 +1,23 @@
-package org.code0.demo.model;
+package org.code0.springmvc2.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
-import org.code0.base.model.BaseModel;
+import org.apache.commons.lang3.StringUtils;
+import org.code0.springmvc2.base.BaseModel;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,22 +25,29 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**  
  * @Title: Person.java
- * @Package org.code0.formValidation.model
- * @Description: Person.java
+ * @Package org.code0.springmvc2.model
+ * @Description: Student.java
  * @author Code0   
  * @date 2017年9月11日 下午4:29:41 
  */
+@Entity
 public class Student extends BaseModel implements Serializable{
 	
-	/** @Fields serialVersionUID : TODO */
 	
 	private static final long serialVersionUID = 576810437616552545L;
 
-
-	@Size(min=3, max=30)
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
+	
+	@NotEmpty
+	@Column(nullable=false,unique=true)
+	private String num;
+	
+	@Size(min=1, max=30)
 	private String firstName;
 
-	@Size(min=3, max=30)
+	@Size(min=1, max=30)
 	private String lastName;
 
 	@NotEmpty
@@ -53,8 +68,12 @@ public class Student extends BaseModel implements Serializable{
 
 	private boolean firstAttempt;
 
+	@ManyToMany
+	private List<Subject> subjects = new ArrayList<Subject>();
+	
 	@NotEmpty
-	private List<String> subjects = new ArrayList<String>();
+	@Transient
+	private String subjectStr;
 
 	public String getFirstName() {
 		return firstName;
@@ -120,16 +139,57 @@ public class Student extends BaseModel implements Serializable{
 		this.firstAttempt = firstAttempt;
 	}
 
-	public List<String> getSubjects() {
+	/** @return id */
+	public Long getId() {
+		return id;
+	}
+	
+	/** @param id 要设置的 id */
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	/** @return num */
+	public String getNum() {
+		return num;
+	}
+	
+	/** @param num 要设置的 num */
+	public void setNum(String num) {
+		this.num = num;
+	}
+	
+	public List<Subject> getSubjects() {
 		return subjects;
 	}
 
-	public void setSubjects(List<String> subjects) {
+	public void setSubjects(List<Subject> subjects) {
 		this.subjects = subjects;
 	}
-	
 	@Override
 	public String toString() {
 		return super.toString();
 	}
+
+	/** @return subjectStr */
+	public String getSubjectStr() {
+		return subjectStr;
+	}
+
+	/** @param subjectStr 要设置的 subjectStr */
+	public void setSubjectStr(String subjectStr) {
+		this.subjectStr = subjectStr;
+	}
+	
+	public void convertSubject(){
+		if(StringUtils.isNotBlank(subjectStr)){
+			String[] sa=subjectStr.split(",");
+			for(String s:sa){
+				Subject e=new Subject();
+				e.setId(Long.valueOf(s));
+				this.subjects.add(e);
+			}
+		}
+	}
+
 }

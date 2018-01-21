@@ -9,8 +9,10 @@
 </head>
 <body>
 	<div class="success">
-		Confirmation message : ${success} <br> We have also sent you a
-		confirmation mail to your email address : ${student.email}.
+	message : ${success}
+	<br/>
+	<br/>
+	Go back to <a href="<c:url value='/list' />">List of All Employees</a>
 	</div>
 </body>
 </html>

@@ -1,20 +1,20 @@
-package org.code0.configuration;
+package org.code0.springmvc2.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
 /**  
- * @Title: DemoInitializer.java
+ * @Title: WebInitializer.java
  * @Package org.code0.configuration
- * @Description: DemoInitializer.java
+ * @Description: 初始化器类 [取代web.xml]
  * @author Code0   
  * @date 2017年12月10日 下午4:49:20 
  */
-public class DemoInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[]{DemoConfiguration.class};
+		return new Class[]{MvcConfiguration.class};
 	}
 
 	@Override

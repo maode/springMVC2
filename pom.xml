@@ -10,19 +10,19 @@
 	<!-- version settings -->
 	<properties>
 		<springframework.version>4.1.4.RELEASE</springframework.version>
+		<hibernate.version>4.3.6.Final</hibernate.version>
 		<hibernate.validator.version>5.1.2.Final</hibernate.validator.version>
 		<javax.validation.version>1.1.0.Final</javax.validation.version>
+		<mysql.connector.version>5.1.31</mysql.connector.version>
+		<joda-time.version>2.3</joda-time.version>
+		<testng.version>6.9.4</testng.version>
+		<mockito.version>1.10.19</mockito.version>
+		<h2.version>1.4.187</h2.version>
+		<dbunit.version>2.5.4</dbunit.version>
 	</properties>
 	
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- servlet Library -->
-		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -30,7 +30,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- jsp Library -->
-		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
 		<dependency>
 		    <groupId>javax.servlet.jsp</groupId>
 		    <artifactId>javax.servlet.jsp-api</artifactId>
@@ -38,14 +37,12 @@
 		    <scope>provided</scope>
 		</dependency>
 		<!-- jstl -->
-		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>jstl</artifactId>
 		    <version>1.2</version>
 		</dependency>
 		<!-- jackson RestController返回json格式数据依赖 -->
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
@@ -53,23 +50,56 @@
 		</dependency>
 		
 		<!-- spring dependencies -->
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
-		<!-- http://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${springframework.version}</version>
+		</dependency>
+		<!-- Spring 事务控制 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<!-- Spring 对象关系映射 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<!-- mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
+		</dependency>
+		<!-- joda-time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda-time.version}</version>
+		</dependency>
+		<!-- 为hibernate添加joda-time支持 -->
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.core</artifactId>
+			<version>3.0.0.CR1</version>
 		</dependency>
 		<!-- jsr303 validation dependencies -->
 		<dependency>
@@ -95,6 +125,42 @@
 		  <version>3.6</version>
 		</dependency>		
 
+		<!-- 测试环境依赖 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springframework.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- TestNG 测试框架 -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Mockito 模拟java对象-->
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>1.10.19</version>
+		    <scope>test</scope>
+		</dependency>
+		<!-- H2 嵌入式数据库 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- dbunit 数据库驱动测试框架 -->
+		<dependency>
+		    <groupId>org.dbunit</groupId>
+		    <artifactId>dbunit</artifactId>
+		    <version>${dbunit.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<finalName>springMVC2</finalName>
