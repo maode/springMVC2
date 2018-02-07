@@ -2,6 +2,7 @@ package org.code0.springmvc2.base;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -35,32 +36,54 @@ public abstract class BaseDao<PK extends Serializable,T> extends HibernateDaoSup
 		return super.currentSession();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public T getByKey(PK key){
-		return (T)getSession().get(persistentClass, key);
+		return this.getHibernateTemplate().get(persistentClass, key);
+		//return (T)getSession().get(persistentClass, key);
 	}
 	
 	public void saveOrUpdate(T entity){
-		getSession().saveOrUpdate(entity);
+		this.getHibernateTemplate().saveOrUpdate(entity);
+		//getSession().saveOrUpdate(entity);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public PK save(T entity){
-		return (PK) getSession().save(entity);
+		return (PK)this.getHibernateTemplate().save(entity);
+		//return (PK) getSession().save(entity);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public T merge(T entity){
-		return (T)getSession().merge(entity);
+		return this.getHibernateTemplate().merge(entity);
+		//return (T)getSession().merge(entity);
 	}
 	
 	public void persist(T entity){
-		getSession().persist(entity);
+		this.getHibernateTemplate().persist(entity);
+		//getSession().persist(entity);
 	}
 	
 	public void delete(T entity){
-		getSession().delete(entity);
+		this.getHibernateTemplate().delete(entity);
+		//getSession().delete(entity);
 	}
+	/**
+	 * 查询符合参数实体中所有非空属性条件的有效数据(忽略主键和关联属性)
+	 * @param object
+	 * @return
+	 */
+	public List<T> searchList(T entity){
+		return this.getHibernateTemplate().findByExample(entity);
+	}
+	
+	/**
+	 * 查询表中所有的有效数据List
+	 * @param entity
+	 * @return
+	 */
+	public List<T> searchAll(){
+		return this.getHibernateTemplate().loadAll(persistentClass);
+	}
+	
 	
 	protected Criteria createEntityCriteria(){
 		return getSession().createCriteria(persistentClass);

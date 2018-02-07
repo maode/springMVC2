@@ -2,15 +2,18 @@ package org.code0.springmvc2.service.impl;
 
 import java.util.List;
 
-import org.code0.springmvc2.base.DataGrid;
 import org.code0.springmvc2.base.ExecuteResult;
 import org.code0.springmvc2.dao.StudentDao;
 import org.code0.springmvc2.model.Student;
 import org.code0.springmvc2.model.Subject;
 import org.code0.springmvc2.service.IStudentService;
+import org.code0.springmvc2.util.DataGrid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.FieldError;
 
 
 /**  
@@ -22,40 +25,44 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class StudentService implements IStudentService<Student> {
+public class StudentServiceImpl implements IStudentService<Student> {
 	@Autowired
 	private StudentDao dao;
+	@Autowired
+	MessageSource messageSource;
 	
 	@Override
 	public List<Subject> findAllSubjects(){
 		return dao.findAllSubjects();
 	}
 	@Override
-	public ExecuteResult<Student> add(Student entity) {
-		// TODO Auto-generated method stub
+	public ExecuteResult add(Student entity) {
+		ExecuteResult result= ExecuteResult.getExecuteResult();
 		Student st=dao.findUniqueBy("num", entity.getNum());
 		if(st==null){
-			//写个工厂类 生成result 设置result 最终返回至controller
 			dao.save(entity);
-			//Long.valueOf(entity.getCountry());
+		}else{
+			String dfMsg=messageSource.getMessage("unique.student.num",new String[]{entity.getNum()}, LocaleContextHolder.getLocale());
+			FieldError fe=new FieldError("student", "num", dfMsg);
+			result.addFieldError("num", fe);
 		}
-		return null;
+		return result;
 	}
 
 	@Override
-	public ExecuteResult<Student> delete(Student entity) {
+	public ExecuteResult delete(Student entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ExecuteResult<Student> ineffective(Student entity) {
+	public ExecuteResult ineffective(Student entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ExecuteResult<Student> ineffectiveByIds(Student entity) {
+	public ExecuteResult ineffectiveByIds(Student entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,13 +74,13 @@ public class StudentService implements IStudentService<Student> {
 	}
 
 	@Override
-	public ExecuteResult<Student> update(Student entity) {
+	public ExecuteResult update(Student entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ExecuteResult<Student> saveOrUpdate(Student entity) {
+	public ExecuteResult saveOrUpdate(Student entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -92,8 +99,7 @@ public class StudentService implements IStudentService<Student> {
 
 	@Override
 	public List<Student> searchAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.dao.searchAll();
 	}
 
 	@Override

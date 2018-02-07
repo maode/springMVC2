@@ -61,7 +61,7 @@ public class Student extends BaseModel implements Serializable{
 	private String email;
 
 	@NotEmpty
-	private String section;
+	private String grade;
 
 	@NotEmpty
 	private String country;
@@ -115,12 +115,12 @@ public class Student extends BaseModel implements Serializable{
 		this.email = email;
 	}
 
-	public String getSection() {
-		return section;
+	public String getGrade() {
+		return grade;
 	}
 
-	public void setSection(String section) {
-		this.section = section;
+	public void setGrade(String grade) {
+		this.grade = grade;
 	}
 
 	public String getCountry() {

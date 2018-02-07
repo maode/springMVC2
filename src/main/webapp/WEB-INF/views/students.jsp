@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>University Enrollments</title>
+	<title>学生列表</title>
 
 	<style>
 		tr:first-child{
@@ -17,22 +17,23 @@
 
 
 <body>
-	<h2>List of Employees</h2>	
+	<h2>List of Student</h2>	
 	<table>
 		<tr>
-			<td>NAME</td><td>Joining Date</td><td>Salary</td><td>SSN</td><td></td>
+			<td>NAME</td><td>Sex</td><td>Number</td><td>First Attempt</td><td>edit</td><td>delete</td>
 		</tr>
-		<c:forEach items="${employees}" var="employee">
+		<c:forEach items="${students}" var="student">
 			<tr>
-			<td>${employee.name}</td>
-			<td>${employee.joiningDate}</td>
-			<td>${employee.salary}</td>
-			<td><a href="<c:url value='/edit-${employee.ssn}-employee' />">${employee.ssn}</a></td>
-			<td><a href="<c:url value='/delete-${employee.ssn}-employee' />">delete</a></td>
+			<td>${student.firstName}${student.lastName}</td>
+			<td>${student.sex=='F' ? '女':'男'}</td>
+			<td>${student.num}</td>
+			<td>${student.firstAttempt}</td>
+			<td><a href="<c:url value='/student/${student.id}' />">${student.num}</a></td>
+			<td><a href="<c:url value='/student/${student.id}' />">delete</a></td>
 			</tr>
 		</c:forEach>
 	</table>
 	<br/>
-	<a href="<c:url value='/new' />">Add New Employee</a>
+	<a href="<c:url value='/student' />">Add New Student</a>
 </body>
 </html>

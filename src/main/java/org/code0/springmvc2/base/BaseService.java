@@ -2,6 +2,8 @@ package org.code0.springmvc2.base;
 
 import java.util.List;
 
+import org.code0.springmvc2.util.DataGrid;
+
 
 /**  
  * @Title: BaseService.java
@@ -15,22 +17,22 @@ public interface BaseService<T> {
 	 * 新增对象
 	 * @param entity
 	 */
-	public ExecuteResult<T> add(T entity);
+	public ExecuteResult add(T entity);
 	/**
 	 * 物理删除对象
 	 * @param entity
 	 */
-	public ExecuteResult<T> delete(T entity);
+	public ExecuteResult delete(T entity);
 	/**
 	 * 逻辑删除对象
 	 * @param entity
 	 */
-	public ExecuteResult<T> ineffective(T entity);
+	public ExecuteResult ineffective(T entity);
 	/**
 	 * 根据ids批量逻辑删除对象
 	 * @param entity
 	 */
-	public ExecuteResult<T> ineffectiveByIds(T entity);
+	public ExecuteResult ineffectiveByIds(T entity);
 	/**
 	 * 根据id获取对象
 	 * @param entity
@@ -41,12 +43,12 @@ public interface BaseService<T> {
 	 * 修改对象
 	 * @param entity
 	 */
-	public ExecuteResult<T> update(T entity);
+	public ExecuteResult update(T entity);
 	/**
 	 * 增加或修改对象
 	 * @param entity
 	 */
-	public ExecuteResult<T> saveOrUpdate(T entity);
+	public ExecuteResult saveOrUpdate(T entity);
 	/**
 	 * 查询符合参数实体中所有非空属性条件以及分页条件的有效数据DataGrid
 	 * @param entity

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.code0.springmvc2.base.BaseController;
 import org.code0.springmvc2.base.ExecuteResult;
 import org.code0.springmvc2.model.Student;
 import org.code0.springmvc2.model.Subject;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping("/student")//该类中所有方法处理基于`/student`父路径下的请求
-public class StudentController {
+public class StudentController extends BaseController {
 
 	@Autowired
 	IStudentService<Student> service;
@@ -54,17 +56,24 @@ public class StudentController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public String addStudent(@Valid Student student, BindingResult varify, ModelMap model){
+	public String addStudent(@Valid Student student, BindingResult verify, ModelMap model){
 
-		if(varify.hasErrors()) {
+		if(verify.hasErrors()) {
 		        return "addStudent";
 		}
 		student.convertSubject();
-		ExecuteResult<Student> er=service.add(student);
+		ExecuteResult er=service.add(student);
 		if(er.isSuccess()){
-			return "students";
+			return "redirect:students1";
 		}else{
-			model.addAttribute("serviceError", er.getErrorMessages());
+			if(er.hasFieldError()){
+				for(Object fe:er.getFieldErrors().values()){
+					verify.addError((FieldError)fe);
+				}
+			}
+			if(er.hasErrorMessage()){
+				model.addAttribute(ERROR_MSG, er.getErrorMessages());
+			}
 			return "addStudent";
 		}
 	}
@@ -77,7 +86,7 @@ public class StudentController {
 	 */
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public String editStudent(@PathVariable Long id,ModelMap model){
-		
+		//TODO 研究http的那几个标准方法
 		return "editStudent";
 	}
 	
@@ -99,7 +108,7 @@ public class StudentController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.DELETE)
+	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public String delStudent(@PathVariable Long id){
 		
 		return "redirect:/students";
@@ -120,29 +129,30 @@ public class StudentController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value="/students",method=RequestMethod.GET)
+	@RequestMapping(value="/students1")
 	public String listStudents(ModelMap model){
-		
+		List<Student> students=this.service.searchAll();
+		model.addAttribute("students", students);
 		return "students";
 	}
 	
-	/*
-	 * Method used to populate the Section list in view.
-	 * Note that here you can call external systems to provide real data.
+	/**
+	 * 用于在页面中填充“年级”列表数据的方法
+	 * @return
 	 */
-	@ModelAttribute("sections")
-	public List<String> initializeSections() {
+	@ModelAttribute("grades")
+	public List<String> initializeGrades() {
 
-		List<String> sections = new ArrayList<String>();
-		sections.add("Graduate");
-		sections.add("Post Graduate");
-		sections.add("Research");
- 		return sections;
+		List<String> grades = new ArrayList<String>();
+		grades.add("1");
+		grades.add("2");
+		grades.add("3");
+ 		return grades;
 	}
 
-	/*
-	 * Method used to populate the country list in view.
-	 * Note that here you can call external systems to provide real data.
+	/**
+	 * 用于在页面中填充“国家”列表数据的方法。
+	 * @return
 	 */
 	@ModelAttribute("countries")
 	public List<String> initializeCountries() {
@@ -157,9 +167,9 @@ public class StudentController {
  		return countries;
 	}
 
-	/*
-	 * Method used to populate the subjects list in view.
-	 * Note that here you can call external systems to provide real data.
+	/**
+	 * 用于在页面中填充“科目”列表数据的方法。
+	 * @return
 	 */
 	@ModelAttribute("subjects")
 	public List<Subject> initializeSubjects() {

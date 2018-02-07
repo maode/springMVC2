@@ -1,4 +1,4 @@
-package org.code0.springmvc2.base;
+package org.code0.springmvc2.util;
 
 
 import java.util.Date;

@@ -24,13 +24,14 @@ public class StudentDao extends BaseDao<Long, Student> {
 	}
 	
 	/**
+	 * 根据实体类某一个属性值查询数据
 	 * @param propertyName 实体类属性名
 	 * @param propertyValue 实体类属性值
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public Student findUniqueBy(String propertyName,Object propertyValue){
-		List<Student> sts=(List<Student>) this.getHibernateTemplate().find("from Student where ? = ?",propertyName, propertyValue);
+		List<Student> sts=(List<Student>) this.getHibernateTemplate().find("from Student where "+propertyName+" = ?", propertyValue);
 		if(sts!=null&&sts.size()>0){
 			return sts.get(0);
 		}
