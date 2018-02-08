@@ -15,10 +15,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**  
@@ -30,22 +36,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @date 2017年9月13日 下午6:02:09 
  */
 @Controller
-@RequestMapping("/student")//该类中所有方法处理基于`/student`父路径下的请求
+@RequestMapping("/student")//设置父路径，如：模块名。（此处该类中所有方法都响应基于`/student`父路径下的请求）
 public class StudentController extends BaseController {
 
 	@Autowired
-	IStudentService<Student> service;
+	IStudentService service;
 
 	/**
-	 * 跳转到新增页面
+	 * 学生列表页面
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET)
-	public String newStudent(ModelMap model) {
-		Student student = new Student();
-		model.addAttribute("student", student);
-		return "addStudent";
+	@GetMapping({"/","/list"})
+	public String list(ModelMap model){
+		List<Student> students=this.service.searchAll();
+		model.addAttribute("students", students);
+		return "student/list";
+	}
+	
+	/**
+	 * 跳转到新增页面【约定优于配置，默认匹配文件/WEB-INF/views/student/add.jsp】
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/add")
+	public void add(ModelMap model) {
+		model.addAttribute("student", new Student());
 	}
 
 	/**
@@ -55,7 +71,7 @@ public class StudentController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping()
 	public String addStudent(@Valid Student student, BindingResult verify, ModelMap model){
 
 		if(verify.hasErrors()) {
@@ -74,20 +90,47 @@ public class StudentController extends BaseController {
 			if(er.hasErrorMessage()){
 				model.addAttribute(ERROR_MSG, er.getErrorMessages());
 			}
-			return "addStudent";
+			return "student/list";
 		}
 	}
 
+	/**
+	 * 查看学生详细信息
+	 * @param id
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("{id}")
+	public String viewStudent(@PathVariable Long id,ModelMap model){
+		Student student=this.service.findByID(id);
+		model.addAttribute("student", student);
+		return "student/view";
+	}
+	
+	/**
+	 * 根据id删除学生
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping
+	@ResponseBody
+	public String delStudent(@RequestParam Long id){
+		this.service.deleteByID(id);//TODO 待修改
+		return "redirect:/students";
+	}
+	
 	/**
 	 * 跳转到修改页面
 	 * @param id
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public String editStudent(@PathVariable Long id,ModelMap model){
-		//TODO 研究http的那几个标准方法
-		return "editStudent";
+	@GetMapping("/{id}/edit")
+	public String edit(@PathVariable Long id,ModelMap model){
+
+		Student s=this.service.findByID(id);
+		model.addAttribute("student", s);
+		return "student/edit";
 	}
 	
 	/**
@@ -97,22 +140,12 @@ public class StudentController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(method=RequestMethod.PUT)
+	@PutMapping
 	public String updateStudent(@Valid Student student,BindingResult result,ModelMap model){
-		
-		return "success";
+		this.service.update(student);
+		return "redirect:/student";
 	}
 	
-	/**
-	 * 根据id删除学生
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
-	public String delStudent(@PathVariable Long id){
-		
-		return "redirect:/students";
-	}
 	
 	/**
 	 * 根据num删除学生
@@ -124,17 +157,27 @@ public class StudentController extends BaseController {
 		
 		return "redirect:/students";
 	}
-	/**
-	 * 跳转到学生列表页面
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value="/students1")
-	public String listStudents(ModelMap model){
-		List<Student> students=this.service.searchAll();
-		model.addAttribute("students", students);
-		return "students";
-	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * 用于在页面中填充“年级”列表数据的方法

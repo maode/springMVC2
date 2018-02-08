@@ -25,7 +25,7 @@ import org.springframework.validation.FieldError;
  */
 @Service
 @Transactional
-public class StudentServiceImpl implements IStudentService<Student> {
+public class StudentServiceImpl implements IStudentService {
 	@Autowired
 	private StudentDao dao;
 	@Autowired
@@ -50,37 +50,32 @@ public class StudentServiceImpl implements IStudentService<Student> {
 	}
 
 	@Override
-	public ExecuteResult delete(Student entity) {
+	public ExecuteResult deleteByID(Long id) {
+		// TODO Auto-generated method stub
+		Student s=this.dao.getByKey(id);
+		this.dao.delete(s);
+		return ExecuteResult.getExecuteResult();
+	}
+
+	@Override
+	public ExecuteResult ineffectiveByID(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ExecuteResult ineffective(Student entity) {
+	public ExecuteResult ineffectiveByIds(Long... ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ExecuteResult ineffectiveByIds(Student entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Student get(Student entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public Student findByID(Long id) {
+		return this.dao.getByKey(id);
 	}
 
 	@Override
 	public ExecuteResult update(Student entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExecuteResult saveOrUpdate(Student entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
