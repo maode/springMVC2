@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.code0.springmvc2.base.BaseController;
 import org.code0.springmvc2.base.ExecuteResult;
+import org.code0.springmvc2.base.Result;
 import org.code0.springmvc2.model.Student;
 import org.code0.springmvc2.model.Subject;
 import org.code0.springmvc2.service.IStudentService;
@@ -47,7 +48,7 @@ public class StudentController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping({"/","/list"})
+	@GetMapping({"","/list"})
 	public String list(ModelMap model){
 		List<Student> students=this.service.searchAll();
 		model.addAttribute("students", students);
@@ -75,12 +76,12 @@ public class StudentController extends BaseController {
 	public String addStudent(@Valid Student student, BindingResult verify, ModelMap model){
 
 		if(verify.hasErrors()) {
-		        return "addStudent";
+			return "student/add";
 		}
-		student.convertSubject();
+		student.convertToSubjects();
 		ExecuteResult er=service.add(student);
 		if(er.isSuccess()){
-			return "redirect:students1";
+			return "redirect:/student/list";
 		}else{
 			if(er.hasFieldError()){
 				for(Object fe:er.getFieldErrors().values()){
@@ -90,7 +91,7 @@ public class StudentController extends BaseController {
 			if(er.hasErrorMessage()){
 				model.addAttribute(ERROR_MSG, er.getErrorMessages());
 			}
-			return "student/list";
+			return "student/add";
 		}
 	}
 
@@ -114,9 +115,10 @@ public class StudentController extends BaseController {
 	 */
 	@DeleteMapping
 	@ResponseBody
-	public String delStudent(@RequestParam Long id){
-		this.service.deleteByID(id);//TODO 待修改
-		return "redirect:/students";
+	public Result delStudent(@RequestParam Long id){
+		this.service.deleteByID(id);
+		return Result.ok();
+		//return JSON.toJSONString(Result.ok());
 	}
 	
 	/**
@@ -129,6 +131,7 @@ public class StudentController extends BaseController {
 	public String edit(@PathVariable Long id,ModelMap model){
 
 		Student s=this.service.findByID(id);
+		//s.convertToSubjectStr();
 		model.addAttribute("student", s);
 		return "student/edit";
 	}

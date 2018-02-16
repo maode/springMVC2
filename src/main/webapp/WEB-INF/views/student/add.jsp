@@ -14,7 +14,7 @@
 <body>
  	<div class="form-container">
  	<h1><spring:message code="msg.addStu" /></h1>
-	<form:form method="POST" modelAttribute="student" class="form-horizontal">
+	<form:form method="POST" action="/student" modelAttribute="student" class="form-horizontal">
 		<div class="row">
 			<div class="form-group col-md-12">
 				<label class="col-md-3 control-lable" for="firstName"><spring:message code="msg.firstName"/></label>

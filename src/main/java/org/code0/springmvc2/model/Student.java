@@ -181,7 +181,7 @@ public class Student extends BaseModel implements Serializable{
 		this.subjectStr = subjectStr;
 	}
 	
-	public void convertSubject(){
+	public void convertToSubjects(){
 		if(StringUtils.isNotBlank(subjectStr)){
 			String[] sa=subjectStr.split(",");
 			for(String s:sa){
@@ -192,4 +192,13 @@ public class Student extends BaseModel implements Serializable{
 		}
 	}
 
+	public void convertToSubjectStr(){
+		if(this.subjects!=null&&this.subjects.size()>0){
+			StringBuilder sb=new StringBuilder();
+			for(Subject sj:this.subjects){
+				sb.append(sj.getId()).append(",");
+			}
+			this.subjectStr=sb.toString();
+		}
+	}
 }

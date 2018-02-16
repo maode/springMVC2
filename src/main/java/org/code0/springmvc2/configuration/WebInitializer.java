@@ -1,5 +1,11 @@
 package org.code0.springmvc2.configuration;
 
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
@@ -27,5 +33,23 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		return new String[]{"/"};
 	}
 
+	@Override
+	public void onStartup(ServletContext servletContext)
+			throws ServletException {
+		super.onStartup(servletContext);
+		//自定义RESTful方法过滤器
+		FilterRegistration.Dynamic hiddenHttpMethodFilter=servletContext.addFilter("hiddenHttpMethodFilter", new HiddenHttpMethodFilter());
+		hiddenHttpMethodFilter.addMappingForServletNames(null, true, super.getServletName());
+		//字符编码过滤器【防乱码】
+		FilterRegistration.Dynamic encodingFilter=servletContext.addFilter("characterEncodingFilter", new CharacterEncodingFilter("UTF-8",true));
+		encodingFilter.addMappingForUrlPatterns(null, true, "/*");
+		//session生命周期交给servlet管理解决懒加载异常问题
+//		FilterRegistration.Dynamic sessionViewFilter=servletContext.addFilter("openSessionInViewFilter", new OpenSessionInViewFilter());
+//		sessionViewFilter.setInitParameter("singleSession", "true");
+//		sessionViewFilter.addMappingForUrlPatterns(null, true, "/");
+		
+	}
+
+	
 
 }

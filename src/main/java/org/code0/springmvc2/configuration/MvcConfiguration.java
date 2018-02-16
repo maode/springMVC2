@@ -2,10 +2,13 @@ package org.code0.springmvc2.configuration;
 
 import java.util.Locale;
 
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -28,6 +31,9 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan("org.code0.springmvc2")
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	/**
 	 * 配置视图解析器
@@ -89,6 +95,13 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         return interceptor;
     }
 
+    @Bean
+    public OpenSessionInViewInterceptor sessionInterceptor(){
+    	OpenSessionInViewInterceptor sessionInterceptor=new OpenSessionInViewInterceptor();
+    	sessionInterceptor.setSessionFactory(sessionFactory);
+    	return sessionInterceptor;
+    }
+    
     /**
      * 将配置好的拦截器加入拦截器栈
      * @param registry
@@ -97,5 +110,6 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeInterceptor());
+        registry.addWebRequestInterceptor(sessionInterceptor());
     }
 }
