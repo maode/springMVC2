@@ -3,7 +3,9 @@ package org.code0.springmvc2.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +18,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.code0.springmvc2.base.BaseModel;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -31,6 +35,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @date 2017年9月11日 下午4:29:41 
  */
 @Entity
+@Getter
+@Setter
 public class Student extends BaseModel implements Serializable{
 	
 	
@@ -73,132 +79,31 @@ public class Student extends BaseModel implements Serializable{
 	
 	@NotEmpty
 	@Transient
-	private String subjectStr;
+	private Set<Long> subjectSet=new HashSet<Long>();
 
-	public String getFirstName() {
-		return firstName;
-	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getSex() {
-		return sex;
-	}
-
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
-
-	public Date getDob() {
-		return dob;
-	}
-
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getGrade() {
-		return grade;
-	}
-
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public boolean isFirstAttempt() {
-		return firstAttempt;
-	}
-
-	public void setFirstAttempt(boolean firstAttempt) {
-		this.firstAttempt = firstAttempt;
-	}
-
-	/** @return id */
-	public Long getId() {
-		return id;
-	}
 	
-	/** @param id 要设置的 id */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	/** @return num */
-	public String getNum() {
-		return num;
-	}
-	
-	/** @param num 要设置的 num */
-	public void setNum(String num) {
-		this.num = num;
-	}
-	
-	public List<Subject> getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(List<Subject> subjects) {
-		this.subjects = subjects;
-	}
-	@Override
-	public String toString() {
-		return super.toString();
-	}
-
-	/** @return subjectStr */
-	public String getSubjectStr() {
-		return subjectStr;
-	}
-
-	/** @param subjectStr 要设置的 subjectStr */
-	public void setSubjectStr(String subjectStr) {
-		this.subjectStr = subjectStr;
-	}
-	
+	/**
+	 * 将subjectSet的值复制到subjects用来保存到数据库
+	 */
 	public void convertToSubjects(){
-		if(StringUtils.isNotBlank(subjectStr)){
-			String[] sa=subjectStr.split(",");
-			for(String s:sa){
+		if(this.subjectSet!=null&&this.subjectSet.size()>0){
+			for(Long id:this.subjectSet){
 				Subject e=new Subject();
-				e.setId(Long.valueOf(s));
+				e.setId(id);
 				this.subjects.add(e);
 			}
 		}
 	}
 
-	public void convertToSubjectStr(){
+	/**
+	 * 将subjects的值复制到subjectSet用来回显到页面
+	 */
+	public void convertToSubjectSet(){
 		if(this.subjects!=null&&this.subjects.size()>0){
-			StringBuilder sb=new StringBuilder();
 			for(Subject sj:this.subjects){
-				sb.append(sj.getId()).append(",");
+				this.getSubjectSet().add(sj.getId());
 			}
-			this.subjectStr=sb.toString();
 		}
 	}
 }

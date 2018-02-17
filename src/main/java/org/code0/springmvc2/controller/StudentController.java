@@ -72,7 +72,7 @@ public class StudentController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping()
+	@PostMapping
 	public String addStudent(@Valid Student student, BindingResult verify, ModelMap model){
 
 		if(verify.hasErrors()) {
@@ -101,9 +101,10 @@ public class StudentController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping("{id}")
+	@GetMapping("/{id}")
 	public String viewStudent(@PathVariable Long id,ModelMap model){
 		Student student=this.service.findByID(id);
+		student.convertToSubjectSet();
 		model.addAttribute("student", student);
 		return "student/view";
 	}
@@ -116,8 +117,12 @@ public class StudentController extends BaseController {
 	@DeleteMapping
 	@ResponseBody
 	public Result delStudent(@RequestParam Long id){
-		this.service.deleteByID(id);
-		return Result.ok();
+		ExecuteResult rs=this.service.deleteByID(id);
+		if(rs.isSuccess()){
+			return Result.ok();
+		}else{
+			return Result.fail(rs.getErrorMessages().get(0), null);
+		}
 		//return JSON.toJSONString(Result.ok());
 	}
 	
@@ -131,7 +136,7 @@ public class StudentController extends BaseController {
 	public String edit(@PathVariable Long id,ModelMap model){
 
 		Student s=this.service.findByID(id);
-		//s.convertToSubjectStr();
+		s.convertToSubjectSet();
 		model.addAttribute("student", s);
 		return "student/edit";
 	}
@@ -145,6 +150,7 @@ public class StudentController extends BaseController {
 	 */
 	@PutMapping
 	public String updateStudent(@Valid Student student,BindingResult result,ModelMap model){
+		student.convertToSubjects();
 		this.service.update(student);
 		return "redirect:/student";
 	}

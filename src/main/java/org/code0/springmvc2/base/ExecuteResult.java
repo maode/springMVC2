@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @Title: ExecuteResult.java
  * @Package org.code0.springmvc2.util
@@ -13,11 +16,17 @@ import java.util.Map;
  * @author Code0
  * @date 2018年1月6日 下午12:46:53
  */
+@Getter
+@Setter
 public class ExecuteResult implements Serializable {
 	
 	private static final long serialVersionUID = -5773062345051251353L;
 	
-	public static ExecuteResult getExecuteResult(){
+	/**
+	 * 返回一个代表success的不包含任何信息的ExecuteResult对象
+	 * @return
+	 */
+	public static ExecuteResult success(){
 		return new ExecuteResult();
 	}
 	
@@ -34,14 +43,18 @@ public class ExecuteResult implements Serializable {
 	/** @Fields throwable : 抛出的异常 */
 	private Throwable throwable;
 
-	public String getSuccessMessage() {
-		return this.successMessage;
+	public void addErrorMessage(String errorMessage) {
+		this.errorMessages.add(errorMessage);
 	}
 
-	public void setSuccessMessage(String successMessage) {
-		this.successMessage = successMessage;
+	public void addFieldError(String field, Object errorMessage) {
+		this.fieldErrors.put(field, errorMessage);
 	}
 
+	public void addWarningMessage(String warningMessage) {
+		this.warningMessages.add(warningMessage);
+	}
+	
 	public boolean isSuccess() {
 		return (this.errorMessages.isEmpty()) && (this.fieldErrors.isEmpty());
 	}
@@ -54,55 +67,4 @@ public class ExecuteResult implements Serializable {
 		return !this.errorMessages.isEmpty();
 	}
 	
-	public Object getReData() {
-		return this.reData;
-	}
-
-	public void setReData(Object data) {
-		this.reData = data;
-	}
-
-	public List<String> getErrorMessages() {
-		return this.errorMessages;
-	}
-
-	public void setErrorMessages(List<String> errorMessages) {
-		this.errorMessages = errorMessages;
-	}
-
-	public Map<String, Object> getFieldErrors() {
-		return this.fieldErrors;
-	}
-
-	public void setFieldErrors(Map<String, Object> fieldErrors) {
-		this.fieldErrors = fieldErrors;
-	}
-
-	public List<String> getWarningMessages() {
-		return this.warningMessages;
-	}
-
-	public void setWarningMessages(List<String> warningMessages) {
-		this.warningMessages = warningMessages;
-	}
-
-	public void addErrorMessage(String errorMessage) {
-		this.errorMessages.add(errorMessage);
-	}
-
-	public void addFieldError(String field, Object errorMessage) {
-		this.fieldErrors.put(field, errorMessage);
-	}
-
-	public void addWarningMessage(String warningMessage) {
-		this.warningMessages.add(warningMessage);
-	}
-
-	public Throwable getThrowable() {
-		return this.throwable;
-	}
-
-	public void setThrowable(Throwable throwable) {
-		this.throwable = throwable;
-	}
 }

@@ -25,7 +25,7 @@
 		</tr>
 		<c:forEach items="${students}" var="student">
 			<tr>
-			<td>${student.firstName}${student.lastName}</td>
+			<td><a href="/student/${student.id }">${student.firstName}${student.lastName}</a></td>
 			<td>${student.sex=='F' ? '女':'男'}</td>
 			<td>${student.num}</td>
 			<td>${student.firstAttempt}</td>
@@ -44,14 +44,14 @@ $(function(){
 //start	
 	//删除学生
 	$("a[data-del]").on("click",function(){
-		alert(2);
-		var id=$(this).attr("data-del");
+		var $thiz=$(this);
+		var id=$thiz.attr("data-del");
 		$.rest.remove({
 			url:"/student/",
 			data:{id:id},
 			success:function(result){
 				if(result&&result.success===true){
-					$(this).parent("tr").remove();
+					$thiz.parents("tr").remove();
 				}else{
 					alert("删除失败");
 				}

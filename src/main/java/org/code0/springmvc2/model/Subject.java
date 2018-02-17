@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.code0.springmvc2.base.BaseModel;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -20,6 +23,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @date 2018年1月18日 下午7:30:56 
  */
 @Entity
+@Getter
+@Setter
 public class Subject extends BaseModel implements Serializable {
 
 	
@@ -30,20 +35,5 @@ public class Subject extends BaseModel implements Serializable {
 	@NotEmpty
 	@Size(min=3, max=30)
 	private String name;
-	/** @return id */
-	public Long getId() {
-		return id;
-	}
-	/** @param id 要设置的 id */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/** @return name */
-	public String getName() {
-		return name;
-	}
-	/** @param name 要设置的 name */
-	public void setName(String name) {
-		this.name = name;
-	}
+
 }

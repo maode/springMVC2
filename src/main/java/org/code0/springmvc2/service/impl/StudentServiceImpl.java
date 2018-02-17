@@ -37,7 +37,7 @@ public class StudentServiceImpl implements IStudentService {
 	}
 	@Override
 	public ExecuteResult add(Student entity) {
-		ExecuteResult result= ExecuteResult.getExecuteResult();
+		ExecuteResult result= ExecuteResult.success();
 		Student st=dao.findUniqueBy("num", entity.getNum());
 		if(st==null){
 			dao.save(entity);
@@ -53,8 +53,13 @@ public class StudentServiceImpl implements IStudentService {
 	public ExecuteResult deleteByID(Long id) {
 		// TODO Auto-generated method stub
 		Student s=this.dao.getByKey(id);
-		this.dao.delete(s);
-		return ExecuteResult.getExecuteResult();
+		ExecuteResult rs=ExecuteResult.success();
+		if(s!=null){
+			this.dao.delete(s);
+		}else{
+			rs.addErrorMessage("要删除的对象不存在");
+		}
+		return rs;
 	}
 
 	@Override
@@ -76,8 +81,8 @@ public class StudentServiceImpl implements IStudentService {
 
 	@Override
 	public ExecuteResult update(Student entity) {
-		// TODO Auto-generated method stub
-		return null;
+		this.dao.update(entity);
+		return ExecuteResult.success();
 	}
 
 	@Override

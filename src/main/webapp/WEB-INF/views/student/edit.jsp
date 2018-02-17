@@ -6,15 +6,18 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title><spring:message code="msg.addStu"/></title>
+	<title><spring:message code="msg.editStu"/></title>
 	<link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
 	<link href="<c:url value='/static/css/custom.css' />" rel="stylesheet"></link>
 </head>
 
 <body>
  	<div class="form-container">
- 	<h1><spring:message code="msg.addStu" /></h1>
-	<form:form method="POST" modelAttribute="student" class="form-horizontal">
+ 	<h1><spring:message code="msg.editStu" /></h1>
+	<form:form method="POST" action="/student" modelAttribute="student" class="form-horizontal">
+	<input type="hidden" name="_method" value="PUT" />
+	<form:hidden path="id"/>
+	
 		<div class="row">
 			<div class="form-group col-md-12">
 				<label class="col-md-3 control-lable" for="firstName"><spring:message code="msg.firstName"/></label>
@@ -134,9 +137,9 @@
 			<div class="form-group col-md-12">
 				<label class="col-md-3 control-lable" for="subjects"><spring:message code="msg.subjects"/></label>
 				<div class="col-md-7">
-					<form:select path="subjectStr" itemLabel="name" itemValue="id" items="${subjects}" multiple="true" class="form-control input-sm"/>
+					<form:select path="subjectSet" itemLabel="name" itemValue="id" items="${subjects}" multiple="true" class="form-control input-sm"/>
 					<div class="has-error">
-						<form:errors path="subjectStr" class="help-inline"/>
+						<form:errors path="subjectSet" class="help-inline"/>
 					</div>
 				</div>
 			</div>
@@ -147,7 +150,7 @@
 				${errorMsg }
 			</div>
 			<div class="form-actions floatRight">
-				<input type="submit" value='<spring:message code="msg.add"/>' class="btn btn-primary btn-sm">
+				<input type="submit" value='<spring:message code="msg.edit"/>' class="btn btn-primary btn-sm">
 			</div>
 		</div>
 	</form:form>

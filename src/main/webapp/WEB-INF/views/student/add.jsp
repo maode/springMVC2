@@ -134,9 +134,9 @@
 			<div class="form-group col-md-12">
 				<label class="col-md-3 control-lable" for="subjects"><spring:message code="msg.subjects"/></label>
 				<div class="col-md-7">
-					<form:select path="subjectStr" itemLabel="name" itemValue="id" items="${subjects}" multiple="true" class="form-control input-sm"/>
+					<form:select path="subjectSet" itemLabel="name" itemValue="id" items="${subjects}" multiple="true" class="form-control input-sm"/>
 					<div class="has-error">
-						<form:errors path="subjectStr" class="help-inline"/>
+						<form:errors path="subjectSet" class="help-inline"/>
 					</div>
 				</div>
 			</div>
